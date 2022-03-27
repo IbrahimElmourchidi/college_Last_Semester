@@ -1,4 +1,4 @@
-module task1
+module taks1
 
 go 1.18
 

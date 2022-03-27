@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,6 +17,7 @@ func main() {
 		fmt.Println("Database error")
 	}
 	defer db.Close()
+	// initTables(db)
 	option := initView(db)
 	switch option {
 	case "1":
@@ -34,14 +37,6 @@ func main() {
 	default:
 		main()
 	}
-	// clearDatabase(db)
-	// printAllProducts(db, getAllProducts(db))
-	// addNewProduct(db, "nike shoes", "a more amazing shoe", "5")
-	// delteProduct(db, "10")
-	// updateProduct(db, "11", "addidas shoes", "a more amazing shoes", "55")
-	// getSingleProduct(db, "12")
-	// printAllProducts(db, getAllProducts(db))
-
 }
 
 func getAllProducts(db *sql.DB) *sql.Rows {
@@ -104,12 +99,16 @@ func getSingleProduct(db *sql.DB) {
 func addNewProduct(db *sql.DB) {
 	clearScreen()
 	var prodName, prodDesc, prodRate string
+	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Print("Please enter the product name :  ")
-	fmt.Scan(&prodName)
+	scanner.Scan()
+	prodName = scanner.Text()
 	fmt.Print("Please enter the product description :  ")
-	fmt.Scan(&prodDesc)
+	scanner.Scan()
+	prodDesc = scanner.Text()
 	fmt.Print("Please enter the product prodRate :  ")
-	fmt.Scan(&prodRate)
+	scanner.Scan()
+	prodRate = scanner.Text()
 	result, err := db.Query("INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `product_rate`) VALUES (NULL, '" + prodName + "', '" + prodDesc + "', '" + prodRate + "');")
 	if err != nil {
 		fmt.Println("error while inserting")
@@ -120,15 +119,20 @@ func addNewProduct(db *sql.DB) {
 }
 
 func updateProduct(db *sql.DB) {
+	clearScreen()
 	var id, prodName, prodDesc, prodRate string
 	fmt.Print("Please enter the product id:  ")
 	fmt.Scan(&id)
-	fmt.Print("Please enter the product new name :  ")
-	fmt.Scan(&prodName)
-	fmt.Print("Please enter the product new description :  ")
-	fmt.Scan(&prodDesc)
-	fmt.Print("Please enter the product new Rate :  ")
-	fmt.Scan(&prodRate)
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Please enter the product name :  ")
+	scanner.Scan()
+	prodName = scanner.Text()
+	fmt.Print("Please enter the product description :  ")
+	scanner.Scan()
+	prodDesc = scanner.Text()
+	fmt.Print("Please enter the product prodRate :  ")
+	scanner.Scan()
+	prodRate = scanner.Text()
 	result, err := db.Query("UPDATE `products` SET `product_name` = '" + prodName + "', `product_description` = '" + prodDesc + "', `product_rate` = '" + prodRate + "' WHERE `products`.`product_id` = " + id + "; ")
 	if err != nil {
 		fmt.Println("error while updating product", id)
@@ -195,4 +199,11 @@ func clearDatabase(db *sql.DB) {
 	result.Close()
 	fmt.Println("\n========= Database was cleared =========\n")
 	subInitView()
+}
+
+func initTables(db *sql.DB) {
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS products (product_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,product_name varchar(255),product_description varchar(255),product_rate FLOAT)")
+	if err != nil {
+		fmt.Println("cannot create the products table")
+	}
 }
