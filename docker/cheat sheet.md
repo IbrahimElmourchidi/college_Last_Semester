@@ -13,6 +13,7 @@
         
         2. docker start -a container_id 
         // this will execute the default start up command
+    # docker run  = docker create + docker start
 </code>
 <hr>
 
@@ -93,6 +94,22 @@
 
     // brutly stop the container using a kill signal
     docker kill container_id 
+</code>
+<hr>
+
+**010 : To execute command in the running container**
+
+<code>
+    
+    docker exec -it container-id command
+</code>
+<hr>
+
+**011 : To run terminal on the container**
+
+<code>
+    
+    docker exec -it container-id sh
 </code>
 <hr>
 
