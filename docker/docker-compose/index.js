@@ -12,6 +12,7 @@ app.all('', (req, res) => {
   client.get('visits', (err, visits) => {
     res.send(`number of visits: ${visits}`);
     client.set('visits', visits - -1);
+    console.log('increament');
   });
 });
 
