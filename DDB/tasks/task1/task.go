@@ -15,7 +15,7 @@ func main() {
 		fmt.Println("Database error")
 	}
 	defer db.Close()
-	initTables(db)
+	// initTables(db)
 	option := initView(db)
 	switch option {
 	case "1":
@@ -198,16 +198,16 @@ func clearDatabase(db *sql.DB) {
 	subInitView()
 }
 
-func initTables(db *sql.DB) {
-	result, err := db.Query(`CREATE TABLE IF NOT EXISTS products (
-		product_id int NOT NULL AUTO_INCREMENT,
-		product_name varchar(255) NOT NULL,
-		product_description varchar(255) NOT NULL,
-		product_rate FLOAT,
-		PRIMARY KEY (ID)
-	); `)
-	if err != nil {
-		fmt.Println("cannot create the products table")
-	}
-	result.Close()
-}
+// func initTables(db *sql.DB) {
+// 	result, err := db.Query(`CREATE TABLE IF NOT EXISTS products (
+// 		product_id int NOT NULL AUTO_INCREMENT,
+// 		product_name varchar(255) NOT NULL,
+// 		product_description varchar(255) NOT NULL,
+// 		product_rate FLOAT,
+// 		PRIMARY KEY (ID)
+// 	); `)
+// 	if err != nil {
+// 		fmt.Println("cannot create the products table")
+// 	}
+// 	result.Close()
+// }
